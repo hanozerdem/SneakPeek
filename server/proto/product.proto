@@ -1,0 +1,324 @@
+syntax = "proto3";
+
+package product;
+
+service ProductBaseService {
+    rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+    rpc GetAllProducts(GetAllProductsRequest) returns (GetAllProductsResponse);
+    rpc GetProductById(GetProductByIdRequest) returns (GetProductByIdResponse);
+    rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse);
+    rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
+
+    rpc AddSizeToProduct(AddSizeToProductRequest) returns (AddSizeToProductResponse);
+    rpc AddPriceToProduct(AddPriceToProductRequest) returns (AddPriceToProductResponse);
+    rpc IsProductAvailableInSize(IsProductAvailableInSizeRequest) returns (IsProductAvailableInSizeResponse);
+
+    // --- Yeni Stok İşlemleri ---
+    rpc GetProductStock(GetProductStockRequest) returns (GetProductStockResponse);
+    rpc CheckStockBeforeAdding(CheckStockBeforeAddingRequest) returns (CheckStockBeforeAddingResponse);
+    rpc DecreaseStockAfterPurchase(DecreaseStockAfterPurchaseRequest) returns (DecreaseStockAfterPurchaseResponse);
+}
+
+
+/* ------------------ CREATE ------------------ */
+message CreateProductRequest {
+    string productName = 1;
+    string model = 2;
+    string brand = 3;
+    string serialNumber = 4;
+    float price = 5;
+    string currency = 6;
+    string warrantyStatus = 7;
+    string distributor = 8;
+    string description = 9;
+    string color = 10;
+    string category = 11;
+    repeated string tags = 12;
+    repeated ProductSizeInput sizes = 13;
+    repeated ProductPricingInput prices = 14;
+    string imageUrl = 15;
+    float rating = 16;
+    float popularity = 17;
+    int32 sales = 18;
+    string currentPriceType = 19;
+}
+
+message CreateProductResponse {
+    bool status = 1;
+    string message = 2;
+    int32 productId = 3; 
+}
+
+/* ------------------ GET ------------------ */
+message GetAllProductsRequest {}
+
+message GetAllProductsResponse {
+    bool status = 1;
+    string message = 2;
+    repeated Product products = 3;
+}
+
+message Product {
+    int32 productId = 1;
+    string productName = 2;
+    string model = 3;
+    string brand = 4;
+    string serialNumber = 5;
+    float price = 6;
+    string currency = 7;
+    string warrantyStatus = 8;
+    string distributor = 9;
+    string description = 10;
+    string color = 11;
+    string category = 12;
+    repeated string tags = 13;
+    repeated ProductSize sizes = 14;       
+    repeated ProductPricing prices = 15;   
+    repeated Review reviews = 16;          
+    float rating = 17;   
+    string imageUrl = 18;
+    float popularity = 19;
+    int32 sales = 20;
+    string currentPriceType = 21;
+
+}
+
+message ProductSize {
+    int32 sizeId = 1;
+    string size = 2;
+    int32 quantity = 3;
+}
+
+message ProductPricing {
+    int32 pricingId = 1;
+    string priceType = 2;
+    float price = 3;
+    string currency = 4;
+}
+
+message GetProductByIdRequest {
+    int32 productId = 1;
+}
+
+message GetProductByIdResponse {
+    bool status = 1;
+    string message = 2;
+    string productName = 3;
+    string model = 4;
+    string brand = 5;
+    string serialNumber = 6;
+    float price = 7;
+    string currency = 8;
+    string warrantyStatus = 9;
+    string distributor = 10;
+    string description = 11;
+    string color = 12;
+    string category = 13;
+    repeated string tags = 14;
+    repeated ProductSize sizes = 15;
+    repeated ProductPricing prices = 16;
+    string imageUrl = 17;
+    float rating = 18;
+    float popularity = 19;
+    int32 sales = 20;
+    string currentPriceType = 21;
+}
+
+/* ------------------ UPDATE ------------------ */
+message UpdateProductRequest {
+    int32 productId = 1;
+    string productName = 2;
+    string model = 3;
+    string brand = 4;
+    string serialNumber = 5;
+    float price = 6;
+    string currency = 7;
+    string warrantyStatus = 8;
+    string distributor = 9;
+    string description = 10;
+    string color = 11;
+    string category = 12;
+    repeated string tags = 13;
+    repeated ProductSizeInput sizes = 14;
+    repeated ProductPricingInput prices = 15;
+    string imageUrl = 16;
+    float rating = 17;
+    float popularity = 18;
+    int32 sales = 19;
+    string currentPriceType = 20;
+}
+
+message UpdateProductResponse {
+    bool status = 1;
+    string message = 2;
+}
+
+/* ------------------ DELETE ------------------ */
+message DeleteProductRequest {
+    int32 productId = 1;
+}
+
+message DeleteProductResponse {
+    bool status = 1;
+    string message = 2;
+}
+
+/* ------------------ INPUT TYPES ------------------ */
+message ProductSizeInput {
+    string size = 1;
+    int32 quantity = 2;
+}
+
+message ProductPricingInput {
+    string priceType = 1;
+    float price = 2;
+    string currency = 3;
+}
+
+/* ------------------ ADD SIZE ------------------ */
+message AddSizeToProductRequest {
+    int32 productId = 1;
+    string size = 2;
+    int32 quantity = 3;
+}
+
+message AddSizeToProductResponse {
+    bool status = 1;
+    string message = 2;
+    int32 newTotalStock = 3;
+}
+
+/* ------------------ ADD PRICE ------------------ */
+message AddPriceToProductRequest {
+    int32 productId = 1;
+    string priceType = 2;
+    float price = 3;
+    string currency = 4;
+}
+
+message AddPriceToProductResponse {
+    bool status = 1;
+    string message = 2;
+}
+
+/* ------------------ CHECK SIZE AVAILABILITY ------------------ */
+message IsProductAvailableInSizeRequest {
+    int32 productId = 1;
+    string size = 2;
+}
+
+message IsProductAvailableInSizeResponse {
+    bool status = 1;
+    bool available = 2;
+    string message = 3;
+}
+
+/* ------------------ STOCK OPERATIONS ------------------ */
+message GetProductStockRequest {
+    int32 productId = 1;
+     string size = 2;  
+}
+
+message GetProductStockResponse {
+    bool status = 1;
+    string message = 2;
+    int32 stock = 3;
+}
+
+message CheckStockBeforeAddingRequest {
+    int32 productId = 1;
+    int32 quantity = 2;
+    string size = 3;
+}
+
+message CheckStockBeforeAddingResponse {
+    bool status = 1;
+    string message = 2;
+}
+
+message DecreaseStockAfterPurchaseRequest {
+    int32 productId = 1;
+    int32 quantity = 2;
+    string size = 3;
+}
+
+message DecreaseStockAfterPurchaseResponse {
+    bool status = 1;
+    string message = 2;
+}
+
+/* ------------------------ REVIEW ------------------- */
+service ProductReviewService {
+    rpc AddReview(AddReviewRequest) returns (AddReviewResponse);
+    rpc GetReviewsByProductId(GetReviewsRequest) returns (GetReviewsResponse);
+    rpc DeleteReview(DeleteReviewRequest) returns (DeleteReviewResponse);
+    rpc ApproveReview (ApproveReviewRequest) returns (ApproveReviewResponse);
+    rpc RejectReview (RejectReviewRequest) returns (RejectReviewResponse);
+}
+
+message AddReviewRequest {
+  int32 productId = 1;
+  string userId = 2;
+  string reviewText = 3;
+  int32 rating = 4;
+  string userName = 5;
+}
+
+message AddReviewResponse {
+  bool status = 1;
+  string message = 2;
+  Review review = 3; 
+}
+
+message GetReviewsRequest {
+    int32 productId = 1;
+}
+
+message GetReviewsResponse {
+    bool status = 1;
+    string message = 2;
+    repeated Review reviews = 3;
+}
+enum ReviewStatus {
+  PENDING = 0;
+  APPROVED = 1;
+  REJECTED = 2;
+}
+
+message Review {
+  int32 reviewId = 1;
+  string userId = 2;
+  string userName = 3;
+  string reviewText = 4;
+  int32 rating = 5;
+  string createdAt = 6;
+  string status = 7; 
+}
+
+message DeleteReviewRequest {
+    int32 reviewId = 1;
+}
+
+message DeleteReviewResponse {
+    bool status = 1;
+    string message = 2;
+}
+/* ----------------- Approve ----------------- */
+message ApproveReviewRequest {
+  string reviewId = 1;
+}
+
+message ApproveReviewResponse {
+  bool status = 1;
+  string message = 2;
+}
+
+/* ----------------- Reject ----------------- */
+message RejectReviewRequest {
+  string reviewId = 1;
+}
+
+message RejectReviewResponse {
+  bool status = 1;
+  string message = 2;
+}

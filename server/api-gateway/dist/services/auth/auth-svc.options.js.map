@@ -1,0 +1,1 @@
+{"version":3,"file":"auth-svc.options.js","sourceRoot":"","sources":["../../../src/services/auth/auth-svc.options.ts"],"names":[],"mappings":";;;AAAA,yDAAgE;AAGnD,QAAA,wBAAwB,GAAkB;IACnD,SAAS,EAAE,yBAAS,CAAC,IAAI;IACzB,OAAO,EAAE;QACL,GAAG,EAAE,oBAAoB;QACzB,OAAO,EAAE,MAAM;QAGf,SAAS,EAAE,qBAAqB;KACjC;CACN,CAAA"}

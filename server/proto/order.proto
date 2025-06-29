@@ -1,0 +1,202 @@
+syntax = "proto3";
+
+package order;
+
+service OrderService {
+  rpc CreateOrder(CreateOrderRequest) returns (OrderResponse);
+  rpc UpdateOrderStatus(UpdateOrderStatusRequest) returns (OrderResponse);
+  rpc RequestRefund(RequestRefundRequest) returns (RefundResponse);
+  rpc GetOrderHistory(GetOrderHistoryRequest) returns (OrderHistoryResponse);
+  rpc GetOrderStatus(GetOrderStatusRequest) returns (GetOrderStatusResponse);
+  rpc GetOrderById(GetOrderByIdRequest) returns (GetOrderByIdResponse);
+  rpc GetAllRefunds(getAllRefundsRequest) returns (getAllRefundsResponse);
+  rpc GetAllOrderHistories(getAllRefundsRequest) returns (OrderHistoryResponse);
+  rpc ChangeRefundStatus(ChangeRefundStatusRequest) returns (ChangeRefundStatusResponse);
+  rpc CancelOrder(CancelOrderRequest) returns (CancelOrderResponse);
+  rpc ApproveRefund(ChangeRefundRequest) returns (SingleRefundResponse); // ✅ Eklenen satır
+}
+
+message GetOrderByIdRequest {
+  string orderId = 1;
+}
+
+message OrderItemSummary {
+  string productId = 1;
+  int32 quantity = 2;
+  string size = 3;
+}
+
+message GetOrderByIdResponse {
+  string orderId = 1;
+  string userId = 2;
+  string address = 3;
+  repeated OrderItemSummary items = 4;
+  double total = 5;
+  string orderStatus = 6;
+  string createdAt = 7;
+  bool status = 8;
+  string message = 9;
+}
+
+message GetOrderStatusRequest {
+  string orderId = 1;
+}
+
+message CreateOrderRequest {
+  string userId = 1;
+  string email = 2;
+  string userName = 3;
+  string address = 4;
+  string cardInformation = 5;
+  repeated OrderItem items = 6;
+}
+
+message OrderItem {
+  int32 productId = 1;
+  int32 quantity = 2;
+  int32 price = 3;
+  string size = 4;
+}
+
+message UpdateOrderStatusRequest {
+  string orderId = 1;
+  string newStatus = 2;
+}
+
+message RequestRefundRequest {
+  string orderId = 1;
+  string userId = 2;
+  string reason = 3;
+}
+
+message GetOrderHistoryRequest {
+  string userId = 1;
+}
+
+message GetOrderStatusResponse {
+  string orderStatus = 1;
+  bool status = 2;
+  string message = 3;
+}
+
+message OrderResponse {
+  string orderId = 1;
+  bool status = 2;
+  string message = 3;
+  Invoice invoice = 4;
+}
+
+message Invoice {
+  string invoiceId = 1;
+  string userId = 2;
+  string email = 3;
+  string userName = 4;
+  double total = 5;
+  string createdAt = 6;
+  string paymentMethod = 7;
+  string expiryDate = 8;
+  string cardType = 9;
+  string cardLogoUrl = 10;
+  repeated InvoiceItem items = 11;
+  double subTotal = 12;
+  double shippingFee = 13;
+  double taxRate = 14;
+  string companyAddress = 15;
+  string paymentMethodEncrypted = 16;
+  string shippingAddress = 17;
+  string creditCardMasked = 18;
+}
+
+message InvoiceItem {
+  int32 productId = 1;
+  int32 quantity = 2;
+  double price = 3;
+  double total = 4;
+  string productName = 5;
+  string imageUrl = 6;
+}
+
+message RefundResponse {
+  bool status = 1;
+  string message = 2;
+  string orderId = 3;
+  string refundStatus = 4;
+}
+
+message OrderHistoryResponse {
+  repeated OrderSummary orders = 1;
+  bool status = 2;
+  string message = 3;
+}
+
+message OrderSummary {
+  string orderId = 1;
+  string orderStatus = 2;
+  string createdAt = 3;
+  string deliveredAt = 4;
+  repeated OrderItemSummary items = 5;
+  int32 totalQuantity = 6;
+  double totalPrice = 7;
+}
+
+/* ------ Refund ------ */
+
+message getAllRefundsRequest {}
+
+message getAllRefundsResponse {
+  repeated RefundSummary refunds = 1;
+  bool status = 2;
+  string message = 3;
+}
+
+message RefundSummary {
+  string refundId = 1;
+  string refundReason = 2;
+  string userId = 3;
+  repeated int32 productIds = 4;
+  string orderDate = 5;
+  string refundDate = 6;
+}
+
+message ChangeRefundStatusRequest {
+  string refundId = 1;
+  string refundStatus = 2;
+}
+
+message ChangeRefundStatusResponse {
+  bool status = 1;
+  string message = 2;
+}
+
+message CancelOrderRequest {
+  string orderId = 1;
+  string userId = 2;
+  string reason = 3;
+}
+
+message CancelOrderResponse {
+  bool status = 1;
+  string message = 2;
+}
+
+/*  EKLENEN YENİ MESSAGES */
+
+message ChangeRefundRequest {
+  string refundId = 1;
+  string reviewerId = 2;
+}
+
+message SingleRefundResponse {
+  Refund refund = 1;
+}
+
+message Refund {
+  string refundId = 1;
+  string orderId = 2;
+  string userId = 3;
+  string reason = 4;
+  string status = 5;
+  string reviewedBy = 6;
+  string reviewedAt = 7;
+  string createdAt = 8;
+}

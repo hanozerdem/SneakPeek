@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package payment;
+
+// PaymentService definition.
+service PaymentService {
+  // ProcessPayment RPC: processes a payment request and returns a payment response.
+  rpc ProcessPayment(PaymentRequest) returns (PaymentResponse);
+}
+
+// Represents a single cart item.
+message CartItem {
+  int32 productId = 1;
+  int32 quantity = 2;
+  double price = 3;
+}
+
+// Payment request message.
+message PaymentRequest {
+  string userId = 1;
+  string shippingAddress = 2;
+  repeated CartItem items = 3;
+  string paymentMethod = 4;
+  string creditCard = 5; // For dummy payment simulation.
+}
+
+// Invoice message that includes all invoice details.
+message Invoice {
+  string invoiceId = 1;
+  string userId = 2;
+  repeated CartItem items = 3;
+  double subTotal = 4;
+  double shippingFee = 5;
+  double taxRate = 6;
+  double total = 7;
+  string companyAddress = 8;
+  string paymentMethodEncrypted = 9;
+  string createdAt = 10;
+  string pdfBase64 = 11;
+  string shippingAddress = 12;
+  string creditCardMasked = 13;
+  string paymentMethod = 14;
+}
+
+// Payment response message.
+message PaymentResponse {
+  bool status = 1;
+  string message = 2;
+  Invoice invoice = 3;
+}

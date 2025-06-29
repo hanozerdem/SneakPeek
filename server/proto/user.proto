@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package user;
+
+// Api Gateway and User Service communication
+// For Login its important that we return a jwt token for auth
+service UserService {
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc Update(UpdateUserRequest) returns (UpdateUserResponse);
+  rpc Delete(DeleteUserRequest) returns (DeleteUserResponse);
+  rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse);
+}
+
+// Register Messages
+message RegisterRequest {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+  repeated int32 wishlist = 4; // Id s that come from mysql database(products)
+  repeated int32 cart = 5;
+}
+
+
+message RegisterResponse {
+  bool status = 1;
+  string message = 2;
+}
+
+
+// Login Messages
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  bool status = 1;
+  string message = 2;
+  optional string token = 3;
+}
+
+
+// Update User Messages
+message UpdateUserRequest {
+  string userId = 1; // Updated users id
+  optional string username = 2;
+  optional string email = 3;
+  optional string password = 4;
+  repeated int32 wishlist = 5;
+  repeated int32 cart = 6;
+}
+
+message UpdateUserResponse {
+  bool status = 1;
+  string message = 2;
+}
+
+// Delete User Messages
+message DeleteUserRequest {
+  string userId = 1;  // Deleted users id
+}
+
+message DeleteUserResponse {
+  bool status = 1;
+  string message = 2;
+}
+
+
+message GetUserByIdRequest {
+  string userId = 1;
+}
+
+message GetUserByIdResponse {
+  bool status = 1;
+  string message = 2;
+
+  // Nested user object
+  message User {
+    string userId = 1;
+    string username = 2;
+    string email = 3;
+    optional string address = 4;
+    repeated int32 wishlist = 5;
+    repeated int32 cart = 6;
+  }
+
+  optional User user = 3;
+}
+
+/* --------------------  Wishlist grpc service  ------------------------- */
+
+service WishlistService {
+  rpc AddProductToWishlist(WishlistRequest) returns (AddProductToWishlistResponse);
+  rpc GetUserWishlist(GetUserWishlistRequest) returns (GetUserWishlistResponse);
+  rpc RemoveProductFromWishlist(WishlistRequest) returns (WishlistResponse);
+}
+
+message WishlistRequest {
+  string userId = 1;
+  int32 productId = 2;
+}
+
+message WishlistResponse {
+  bool status = 1;
+  string message = 2;
+}
+
+message GetUserWishlistRequest {
+  string userId = 1;
+}
+
+message GetUserWishlistResponse {
+  bool status = 1;
+  string message = 2;
+  repeated int32 wishlist = 3;
+}
+
+message AddProductToWishlistResponse {
+  bool status = 1;
+  string message = 2;
+}

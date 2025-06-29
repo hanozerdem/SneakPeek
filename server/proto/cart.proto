@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package cart;
+
+// Service definition for CartService
+service CartService {
+  rpc AddItem (AddItemToCartRequest) returns (AddItemToCartResponse);
+  rpc RemoveItem (RemoveItemFromCartRequest) returns (RemoveItemFromCartResponse);
+  rpc UpdateItem (UpdateCartItemRequest) returns (UpdateCartItemResponse);
+  rpc GetCart (GetCartRequest) returns (GetCartResponse);
+  rpc ClearCart (ClearCartRequest) returns (ClearCartResponse);
+}
+
+// Messages
+message AddItemToCartRequest {
+  string userId = 1;
+  CartItem item = 2;
+}
+
+message AddItemToCartResponse  {
+  bool status = 1;
+  string message = 2;
+  int32 cartId = 3; 
+}
+
+message RemoveItemFromCartRequest {
+  string userId = 1;
+  int32 productId = 2;
+  string size = 3; 
+}
+
+message RemoveItemFromCartResponse {
+  bool status = 1;
+  string message = 2;
+}
+
+message UpdateCartItemRequest {
+  string userId = 1;
+  int32 productId = 2;
+  string size = 3;     
+  int32 quantity = 4;
+}
+
+message UpdateCartItemResponse {
+  bool status = 1;
+  string message = 2;
+}
+
+message GetCartRequest {
+  string userId = 1;
+}
+
+message GetCartResponse {
+  bool status = 1;
+  string message = 2;
+  repeated CartItem items = 3;
+  double totalPrice = 4;
+}
+
+message ClearCartRequest {
+  string userId = 1;
+}
+
+message ClearCartResponse {
+  bool status = 1;
+  string message = 2;
+}
+
+// CartItem model
+message CartItem {
+  int32 productId = 1;
+  string size = 2;    
+  int32 quantity = 3;
+  double price = 4;
+}

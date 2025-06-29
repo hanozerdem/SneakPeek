@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package notification;
+
+service NotificationService {
+  rpc GetInvoicesBetweenDates(GetInvoicesRequest) returns (GetInvoicesResponse);
+  rpc GetInvoicesPdf(GetInvoicesRequest) returns (GetInvoicesPdfResponse);
+}
+
+message GetInvoicesRequest {
+  string startDate = 1; // eg. "2024-01-01T00:00:00Z"
+  string endDate = 2;   // eg. "2024-01-31T23:59:59Z"
+}
+
+message GetInvoicesResponse {
+  bool status = 1;
+  string message = 2;
+  repeated Invoice invoices = 3;
+}
+
+message GetInvoicesPdfResponse {
+  string pdfBase64 = 1;
+}
+
+message Invoice {
+  string invoiceId = 1;
+  string userId = 2;
+  string userName = 3;
+  string createdAt = 4;
+  double subTotal = 5;
+  double taxRate = 6;
+  double shippingFee = 7;
+  double total = 8;
+  string companyAddress = 9;
+  string paymentMethodEncrypted = 10;
+  string shippingAddress = 11;
+  string creditCardMasked = 12;
+  string paymentMethod = 13;
+  repeated CartItem items = 14;
+}
+
+message CartItem {
+  int32 productId = 1;
+  int32 quantity = 2;
+  double price = 3;
+  string productName = 4;
+}
